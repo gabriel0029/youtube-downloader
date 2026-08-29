@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum DownloadStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+model Download {
+  id          String         @id @default(cuid())
+  url         String
+  videoId     String?
+  title       String?
+  format      String
+  quality     String?
+  status      DownloadStatus @default(PENDING)
+  progress    Int            @default(0)
+  filePath    String?
+  fileName    String?
+  fileSize    BigInt?
+  error       String?
+  createdAt   DateTime       @default(now())
+  startedAt   DateTime?
+  completedAt DateTime?
+  expiresAt   DateTime?
+
+  @@index([status])
+  @@index([createdAt])
+}
